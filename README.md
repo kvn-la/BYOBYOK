@@ -7,6 +7,8 @@ battery, and nothing to check but your word count.
 
 Supports composing accented characters, a typewriter/Hemingway mode, daily journaling, writing goals, spell checking, multiple keyboard layouts (Qwerty, Dvorak, Coleman), and more.
 
+<img width="1280" height="960" alt="image" src="https://github.com/user-attachments/assets/df1fda12-0912-43ea-a6e3-baf2e91da875" />
+
 ---
 
 ## Quick start
