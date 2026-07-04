@@ -5,6 +5,8 @@ writing device built from an M5Stack **M5PaperS3** e-ink tablet and whatever
 keyboard you already love. Plain `.txt` files on a microSD card, weeks of
 battery, and nothing to check but your word count.
 
+Supports composing accented characters, a typewriter/Hemingway mode, daily journaling, writing goals, spell checking, multiple keyboard layouts (Qwerty, Dvorak, Coleman), and more.
+
 ---
 
 ## Quick start
@@ -28,7 +30,7 @@ or 2.4 GHz dongle, via a USB-C OTG adapter) or Bluetooth LE.
 
 **First session:** the device boots to a file browser. Pick `[ New file ]`,
 type, hit ESC → Save. Copy a dictionary to the card as `/wordlist.txt` (any
-standard word list) to enable spell check. Optionally drop books on the card
+standard word list (tested with https://github.com/dwyl/english-words) to enable spell check. Optionally drop books on the card
 as `.txt` — `tools/epub2txt.py` converts EPUBs.
 
 ## Usage
@@ -60,6 +62,7 @@ appending.
 circumflex, `n` tilde, `b` breve; direct: `Option+a`→å, `o`→ø, `s`→ß, `c`→ç,
 `'`→æ). Esperanto: `Option+i` + c/g/h/j/s → ĉĝĥĵŝ, `Option+b, u` → ŭ. The
 pending accent shows inverted at the caret. Files save as normal UTF-8.
+It even supports Esperanto characters for weirdos like me (saluton, amikoj!)
 
 **Markdown** — the Reader renders `**bold**`, `*italic*` and `# headings`
 styled (markers stay visible); the editor keeps plain text.
@@ -172,5 +175,5 @@ and sags under load.
   ceiling is a few MB of text.
 - **Heavy ghosting** — `Ctrl+R`, or lower the `DEGHOST_*` constants.
 
-**Ideas to extend:** sync *down* from the cloud, spell-check suggestions,
-dead-key visual themes, a real fuel gauge (MAX17048 on the Grove port).
+**Limitations**
+- Battery percentages are estimated based on voltage. There is no actual battery guage in the M5PaperS3. 
