@@ -169,6 +169,9 @@ and sags under load.
   The Key test screen (BT kbd → Key test) shows whether events arrive.
 - **BLE won't pair** — must be BLE, not Classic; clear old pairings on the
   keyboard; the pairing window is 30 s.
+- **Bluetooth keyboard doesn't reconnect** - I ran into this issue with one
+  keyboard. If I hit "Pair new keyboard" then put the keyboard back in sync
+  mode, it would reconnect immediately. YMMV
 - **USB drive doesn't appear** — check both Tools settings from Quick start;
   use a data-capable cable.
 - **microSD not found** — reformat FAT32, reseat, reset.
