@@ -26,12 +26,12 @@ or 2.4 GHz dongle, via a USB-C OTG adapter) or Bluetooth LE.
    **EspUsbHost** (Masayuki Tanaka), **NimBLE-Arduino** (≥ 2.0).
 4. Open `BYOBYOK/BYOBYOK.ino` (keep `fonts_latin1.h` beside it), upload.
 5. After flashing: unplug, connect the keyboard, insert the card. To re-flash
-   later, hold BOOT while tapping RESET (USB host mode replaces the serial
+   later, hold BOOT (USB host mode replaces the serial
    port — that's expected).
 
 **First session:** the device boots to a file browser. Pick `[ New file ]`,
 type, hit ESC → Save. Copy a dictionary to the card as `/wordlist.txt` (any
-standard word list (tested with https://github.com/dwyl/english-words) to enable spell check. Optionally drop books on the card
+standard word list (tested with https://github.com/dwyl/english-words)) to enable spell check. Optionally drop books on the card
 as `.txt` — `tools/epub2txt.py` converts EPUBs.
 
 ## Usage
