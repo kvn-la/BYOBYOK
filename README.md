@@ -2,10 +2,9 @@
 
 **Bring Your Own Bring Your Own Keyboard** — a distraction-free
 writing device built from an M5Stack **M5PaperS3** e-ink tablet and whatever
-keyboard you already love. Plain `.txt` files on a microSD card, weeks of
-battery, and nothing to check but your word count.
+keyboard you already love.
 
-Supports composing accented characters, a typewriter/Hemingway mode, daily journaling, writing goals, spell checking, multiple keyboard layouts (Qwerty, Dvorak, Coleman), and more.
+Supports composing accented characters, a typewriter/Hemingway mode, daily journaling, writing goals, spell checking, multiple keyboard layouts (Qwerty, Dvorak, Coleman), USB drive mode, WebDAV syncing, Wi-Fi sharing, and more.
 
 <img width="1280" height="960" alt="demo" src="https://github.com/user-attachments/assets/f4a28dc7-9ad6-46cb-ba9b-17a894e4bd88" />
 
@@ -178,4 +177,9 @@ and sags under load.
 - **Heavy ghosting** — `Ctrl+R`, or lower the `DEGHOST_*` constants.
 
 **Limitations**
-- Battery percentages are estimated based on voltage. There is no actual battery guage in the M5PaperS3. 
+- Battery percentages are estimated based on voltage. There is no actual battery
+  guage in the M5PaperS3, so percentage has a wide swing depending on whether it's
+  charging or not. I didn't want to leave it with no way to estimate battery though
+- I could not make it work with a high powered keyboard (NuPhy Air60) wired directly with a USB C cable.
+- Some features (WebDAV sync, wired keyboards) have only been tested to a limited
+  capacity. Please file a bug report if you notice something is not working.
