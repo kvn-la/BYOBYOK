@@ -61,9 +61,9 @@ appending.
 **Accents & Esperanto** — hold Option/Alt for a dead key, then the letter:
 `Option+u, a` → ä (dead keys: `u` diaeresis, `e` acute, `` ` `` grave, `i`
 circumflex, `n` tilde, `b` breve; direct: `Option+a`→å, `o`→ø, `s`→ß, `c`→ç,
-`'`→æ). Esperanto: `Option+i` + c/g/h/j/s → ĉĝĥĵŝ, `Option+b, u` → ŭ. The
+`'`→æ). It even supports Esperanto characters for weirdos like me (saluton, amikoj!) 
+Esperanto: `Option+i` + c/g/h/j/s → ĉĝĥĵŝ, `Option+b, u` → ŭ. The
 pending accent shows inverted at the caret. Files save as normal UTF-8.
-It even supports Esperanto characters for weirdos like me (saluton, amikoj!)
 
 **Markdown** — the Reader renders `**bold**`, `*italic*` and `# headings`
 styled (markers stay visible); the editor keeps plain text.
