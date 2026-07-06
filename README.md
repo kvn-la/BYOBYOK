@@ -1,6 +1,6 @@
 # BYOBYOK
 
-**Bring Your Own Bring Your Own Keyboard** — a distraction-free
+**Build Your Own Bring Your Own Keyboard** — a distraction-free
 writing device built from an M5Stack **M5PaperS3** e-ink tablet and whatever
 keyboard you already love.
 
