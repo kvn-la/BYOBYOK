@@ -376,6 +376,10 @@ bool g_focus = false;               // session-only, toggled in the ESC menu
 // pending dead key for Option-composition (0 = none)
 char g_pendingDead = 0;
 
+// accent scheme: 0 = macOS-style (Option+letter dead keys),
+// 1 = AltGr-International (dead keys on ' " ` ^ ~). Persisted in NVS.
+int g_composeScheme = 0;
+
 // display orientation: the Reader can run portrait; menu and editor stay
 // landscape (their layouts don't fit a 540 px width).
 bool g_portrait = false;            // reader preference (persisted in NVS)
@@ -475,6 +479,7 @@ void sessionEnd();
 void saveResume();
 void openForEditing(const String &path);
 void openJournal();
+void saveLayout();
 void toggleLayout();
 void toggleFont();
 void toggleReaderRot();
@@ -885,8 +890,8 @@ void bleLoopTick() {                             // called every loop()
 }
 
 // ---- pairing screen (ST_BTPAIR) - fully touch-operable --------------------
-const int BT_ROWS = 5;
-const int BT_ROW_H = 42, BT_ROW_GAP = 8, BT_ROW_W = 560;
+const int BT_ROWS = 6;
+const int BT_ROW_H = 38, BT_ROW_GAP = 6, BT_ROW_W = 560;
 int g_btRowYs[BT_ROWS];                    // -1 = row not shown this draw
 
 void drawBtPair() {
@@ -927,10 +932,11 @@ void drawBtPair() {
     !g_bleEnabled ? nullptr
                   : (g_bleUserOff ? "Turn Bluetooth on" : "Turn Bluetooth off (keep pairing)"),
     "Key test (shows what each key sends)",
+    (g_composeScheme == 1) ? "Accents: AltGr international" : "Accents: macOS-style (Option)",
     g_bleEnabled ? "Forget this keyboard" : nullptr,
     "Back",
   };
-  int y = 244;
+  int y = 236;
   for (int i = 0; i < BT_ROWS; i++) {
     g_btRowYs[i] = -1;
     if (!lbl[i]) continue;
@@ -941,7 +947,7 @@ void drawBtPair() {
   }
 
   M5.Display.setFont(&fonts::FreeMono9pt7b);
-  M5.Display.drawString("BLE keyboards only (Bluetooth 4/5).  p pair  o on/off  t key test  f forget  ESC back",
+  M5.Display.drawString("BLE only (no Classic).  p pair  o on/off  t key test  a accents  f forget  ESC back",
                         MARGIN_X, H - 26);
   M5.Display.endWrite();
 }
@@ -962,8 +968,9 @@ void doBtPairAction(int i) {
     case 0: bleBeginPair(); drawBtPair(); break;
     case 1: bleTogglePower(); drawBtPair(); break;
     case 2: enterKeyTest(); break;
-    case 3: if (g_bleEnabled) { bleForget(); drawBtPair(); } break;
-    case 4: btPairLeave(); break;
+    case 3: g_composeScheme = 1 - g_composeScheme; saveLayout(); drawBtPair(); break;
+    case 4: if (g_bleEnabled) { bleForget(); drawBtPair(); } break;
+    case 5: btPairLeave(); break;
   }
 }
 
@@ -972,7 +979,8 @@ void handleBtPairKey(uint8_t ascii, uint8_t keycode) {
   if (ascii == 'p' || ascii == 'P') { doBtPairAction(0); return; }
   if (ascii == 'o' || ascii == 'O') { doBtPairAction(1); return; }
   if (ascii == 't' || ascii == 'T') { doBtPairAction(2); return; }
-  if (ascii == 'f' || ascii == 'F') { doBtPairAction(3); return; }
+  if (ascii == 'a' || ascii == 'A') { doBtPairAction(3); return; }
+  if (ascii == 'f' || ascii == 'F') { doBtPairAction(4); return; }
 }
 
 void btPairTap(int x, int y) {
@@ -1531,6 +1539,47 @@ uint8_t optionChar(char key) {
 }
 bool composeDead(char k) {
   return k == 'u' || k == 'e' || k == 'i' || k == 'n' || k == 'b' || k == '`';
+}
+
+// ---- AltGr-International scheme (like the "US intl., AltGr dead keys"
+// layout): dead keys live on the punctuation instead of letters. Each maps
+// to the same internal accent code the COMPOSE table uses, so both schemes
+// share one composition path (including the Esperanto circumflex letters).
+char intlDeadToAccent(char k) {
+  switch (k) {
+    case '\'': return 'e';   // acute
+    case '"':  return 'u';   // diaeresis
+    case '`':  return '`';   // grave
+    case '^':  return 'i';   // circumflex
+    case '~':  return 'n';   // tilde
+    case 'b':  return 'b';   // breve (BYOBYOK extension, for Esperanto's ŭ)
+  }
+  return 0;
+}
+
+// US-International direct characters (AltGr+letter, Shift for capitals).
+uint8_t intlChar(char key) {
+  switch (key) {
+    case 'a': return 0xE1; case 'A': return 0xC1;   // á Á
+    case 'e': return 0xE9; case 'E': return 0xC9;   // é É
+    case 'i': return 0xED; case 'I': return 0xCD;   // í Í
+    case 'o': return 0xF3; case 'O': return 0xD3;   // ó Ó
+    case 'u': return 0xFA; case 'U': return 0xDA;   // ú Ú
+    case 'y': return 0xFD; case 'Y': return 0xDD;   // ý Ý
+    case 'n': return 0xF1; case 'N': return 0xD1;   // ñ Ñ
+    case 'q': return 0xE4; case 'Q': return 0xC4;   // ä Ä
+    case 'w': return 0xE5; case 'W': return 0xC5;   // å Å
+    case 'p': return 0xF6; case 'P': return 0xD6;   // ö Ö
+    case 'l': return 0xF8; case 'L': return 0xD8;   // ø Ø
+    case 'z': return 0xE6; case 'Z': return 0xC6;   // æ Æ
+    case 'd': return 0xF0; case 'D': return 0xD0;   // ð Ð
+    case 't': return 0xFE; case 'T': return 0xDE;   // þ Þ
+    case 's': return 0xDF;                          // ß
+    case 'c': return 0xE7; case 'C': return 0xC7;   // ç Ç
+    case '1': return 0xA1;                          // ¡
+    case '/': return 0xBF;                          // ¿
+  }
+  return 0;
 }
 
 // ---- markdown emphasis (rendered by the Reader) -----------------------------
@@ -2518,14 +2567,22 @@ void handleEditKey(uint8_t ascii, uint8_t keycode, uint8_t modifier) {
     // ...then fall through: the key acts normally
   }
   if (alt && !ctrl && g_keepLatin1 && ascii >= 32 && ascii < 127) {
-    if (composeDead((char)ascii)) {
-      g_pendingDead = (char)ascii;
+    char dk = 0;
+    uint8_t direct = 0;
+    if (g_composeScheme == 1) {                // AltGr-International
+      dk = intlDeadToAccent((char)ascii);
+      if (!dk) direct = intlChar((char)ascii);
+    } else {                                   // macOS-style
+      if (composeDead((char)ascii)) dk = (char)ascii;
+      else direct = optionChar((char)ascii);
+    }
+    if (dk) {
+      g_pendingDead = dk;                      // normalized accent code
       drawPendingAccent();                     // show the waiting accent
       return;
     }
-    uint8_t o = optionChar((char)ascii);
-    if (o) insertChar((char)o);
-    return;                                    // unknown Option combo: swallow
+    if (direct) insertChar((char)direct);
+    return;                                    // unknown combo: swallow
   }
   // Shortcuts are layout-aware: kl is the letter this key TYPES (so Ctrl+W
   // is w-as-typed on Dvorak/Colemak, not the physical QWERTY position).
@@ -4448,6 +4505,8 @@ void loadLayout() {
   g_fontSize = g_prefs.getInt("fontsz", 1);
   if (g_fontSize < 0 || g_fontSize > 2) g_fontSize = 1;
   g_portrait = g_prefs.getBool("portrait", false);
+  g_composeScheme = g_prefs.getInt("compose", 0);
+  if (g_composeScheme < 0 || g_composeScheme > 1) g_composeScheme = 0;
   g_prefs.end();
 }
 void saveLayout() {
@@ -4455,6 +4514,7 @@ void saveLayout() {
   g_prefs.putInt("layout", g_layout);
   g_prefs.putInt("fontsz", g_fontSize);
   g_prefs.putBool("portrait", g_portrait);
+  g_prefs.putInt("compose", g_composeScheme);
   g_prefs.end();
 }
 void toggleLayout() { g_layout = (g_layout + 1) % LAYOUT_COUNT; saveLayout(); drawMenu(); }
