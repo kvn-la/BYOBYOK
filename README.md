@@ -64,11 +64,15 @@ timed sprints or word goals; `s` in the menu shows daily words, streaks and
 lifetime totals. `j` opens today's journal (`/journal/YYYY-MM-DD.txt`),
 appending.
 
-**Accents & Esperanto** — hold Option/Alt for a dead key, then the letter:
+**Accents & Esperanto** — two schemes, toggled on the `BT kbd` screen
+(`a` / tap "Accents"). **AltGr-International** puts dead keys on the
+punctuation (`AltGr+'` acute, `"` diaeresis, `` ` `` grave, `^` circumflex,
+`~` tilde) with US-Intl direct characters (`AltGr+a`→á, `q`→ä, `w`→å, `p`→ö,
+`z`→æ, `n`→ñ, `s`→ß, `1`→¡, `/`→¿…). The default **macOS-style** scheme:
+hold Option/Alt for a dead key, then the letter:
 `Option+u, a` → ä (dead keys: `u` diaeresis, `e` acute, `` ` `` grave, `i`
 circumflex, `n` tilde, `b` breve; direct: `Option+a`→å, `o`→ø, `s`→ß, `c`→ç,
-`'`→æ). It even supports Esperanto characters for weirdos like me (saluton, amikoj!) 
-Esperanto: `Option+i` + c/g/h/j/s → ĉĝĥĵŝ, `Option+b, u` → ŭ. The
+`'`→æ). Esperanto: `Option+i` + c/g/h/j/s → ĉĝĥĵŝ, `Option+b, u` → ŭ. The
 pending accent shows inverted at the caret. Files save as normal UTF-8.
 
 **Markdown** — the Reader renders `**bold**`, `*italic*` and `# headings`
