@@ -15,6 +15,12 @@ Supports composing accented characters, a typewriter/Hemingway mode, daily journ
 **You need:** an M5PaperS3, a FAT32 microSD card, and a keyboard — USB (wired
 or 2.4 GHz dongle, via a USB-C OTG adapter) or Bluetooth LE.
 
+> **The OTG adapter (USB-C male → USB-A female) is required for USB
+> keyboards.** A direct USB-C-to-C cable can never work: the PaperS3's port
+> has no host-role hardware on the CC pins, so a C-to-C-connected keyboard
+> waits forever for a host that never announces itself. This is silicon, not
+> firmware — use the adapter, a powered hub, a 2.4 GHz dongle, or Bluetooth.
+
 **Flash it:**
 
 1. Arduino IDE → install the M5Stack board package (Board Manager URL
